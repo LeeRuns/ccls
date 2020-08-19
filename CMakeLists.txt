@@ -30,6 +30,20 @@ set_property(TARGET ccls PROPERTY CXX_STANDARD 17)
 set_property(TARGET ccls PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET ccls PROPERTY CXX_EXTENSIONS OFF)
 
+#Setup Conan to Pull required zlib libraries
+if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+   message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+   file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/master/conan.cmake"
+                  "${CMAKE_BINARY_DIR}/conan.cmake")
+endif()
+include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+# Install zlib 
+conan_cmake_run(REQUIRES zlib/1.2.11@ BASIC_SETUP)
+
+# Add Zlib to include paths done by code above?
+
+
 # CMake sets MSVC for both MSVC and Clang(Windows)
 if(MSVC)
   # Common MSVC/Clang(Windows) options
